@@ -35,6 +35,10 @@ log_cp(security, share_price, dt=None)
 Clear a position of given security at given share_price and log it. If dt is left as None, it will log current time, else set dt to a datetime object to log a custom time.
 ***
 ```
+get_position(security)
+```
+Returns a tuple in the format (# shares, position size), position size is (# shares) * (average share price). It is slightly different from the format of get_positions.
+```
 get_positions()
 ```
 Returns a dict of current security holdings in form of {security: {'shares': # shares, 'avg_share_price': average share price1}, another_security: {'shares': # shares, 'avg_share_price': average share price1}, ...}, where the key corresponding to a security is the string passed through the log() method.
