@@ -15,15 +15,14 @@ class _Position:
         else:  # covering short position
             if abs(self.shares) >= shares:
                 profit = (self.position_size / self.shares) * shares - share_price * shares
-                self.position_size += share_price * shares
+                self.position_size += share_price * shares + profit
                 self.shares += shares
                 return profit
             else:
-
+                profit = self.position_size - share_price * self.shares
                 self.shares += shares
-                self.position_size += self.shares * share_price
-                return self.position_size - share_price * self.shares
-
+                self.position_size += shares * share_price + profit
+                return profit
     def sell(self, shares, share_price):
         if shares < 0 or share_price <= 0:
             raise ValueError(" Please enter positive numbers for shares and share_price")
@@ -33,19 +32,18 @@ class _Position:
             return float('NaN')
         else:  # covering long position
             if self.shares >= shares:
-                profit = (self.position_size / self.shares) * shares - share_price * shares
+                profit = share_price * shares - (self.position_size / self.shares) * shares
                 self.shares -= shares
+                self.position_size -= shares * share_price - profit
                 return profit
             else:
+                profit = share_price * self.shares - self.position_size
                 self.shares -= shares
-                self.position_size -= self.shares * share_price
-                return self.position_size - share_price * self.shares
+                self.position_size -= shares * share_price - profit
+                return profit
 
-    def clear_position(self, share_price):
-        if self.shares < 0:
-            self.buy(self.shares, share_price)
-        else:
-            self.sell(self.shares, share_price)
+    def get_shares(self):
+        return self.shares
     def to_dict(self):
         if self.shares != 0:
             return {'shares': self.shares, 'avg_share_price': self.position_size / self.shares}
