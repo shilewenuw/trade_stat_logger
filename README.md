@@ -27,7 +27,7 @@ Constructs a new SimpleLogger object. Set datetime_support=True if you want to l
 ```
 log(security, shares, share_price, dt=None)
 ```
-Log trades with this method. Shares is the number of shares you wish to purchase, and share_price is the price of a share. If dt is left as None, it will log current time, else set dt to a datetime object to log a custom time.
+Log trades with this method. Shares is the number of shares you wish to purchase, set to negative to short/sell, and share_price is the price of a share. If dt is left as None, it will log current time, else set dt to a datetime object to log a custom time.
 ***
 ```
 log_cp(security, share_price, dt=None)
