@@ -42,6 +42,12 @@ class SimpleLogger:
         if security in self.positions.keys():
             self.log(security, share_price, self.positions[security].get_shares(), dt=dt)
 
+    def get_position(self, security):
+        if security in self.positions.keys():
+            return self.positions[security].to_tuple()
+        else:
+            return 0, 0
+
     def get_positions(self):
         return dict((k, v.to_dict()) for k, v in self.positions.items())
 

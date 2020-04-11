@@ -2,14 +2,14 @@ from distutils.core import setup
 setup(
   name = 'trade_stat_logger',
   packages = ['trade_stat_logger'],
-  version = '0.1',
+  version = '0.2',
   license='MIT',
   description = 'Log trades and analyze performance, risk, and other statistical measures',
-  long_description= 'View documenation at https://github.com/shilewenuw/trade_stat_logger/README.md',
+  long_description = 'View documentation at https://github.com/shilewenuw/trade_stat_logger/README.md',
   author = 'Shile Wen',
   author_email = 'shilewen1@gmail.com',
   url = 'https://github.com/shilewenuw',
-  download_url = 'https://github.com/shilewenuw/get_all_tickers/archive/v_02.tar.gz',
+  download_url = 'https://github.com/shilewenuw/trade_stat_logger/archive/v_01.tar.gz',
   keywords = ['PYTHON', 'STOCKS', 'TRADING', 'BACKTEST', 'STATISTICS'],
   install_requires=[
           'numpy', 'pandas', 'pytz', 'matplotlib', 'yahoo_fin'

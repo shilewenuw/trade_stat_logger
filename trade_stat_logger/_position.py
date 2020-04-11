@@ -44,6 +44,10 @@ class _Position:
 
     def get_shares(self):
         return self.shares
+
+    def to_tuple(self):
+        return self.shares, self.position_size
+
     def to_dict(self):
         if self.shares != 0:
             return {'shares': self.shares, 'avg_share_price': self.position_size / self.shares}
