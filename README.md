@@ -59,7 +59,38 @@ Returns a dictionary of various statistics in the form of {statistic1_name: valu
 ```
 graph_statistics(time_axis=False, time_strformat='%m/%d/%Y', show_window=True)
 ```
-Graphs the distribution of trade returns, net profit at the nth trade, and puts the summary statistics in a table. If you would like to have the x-axis for the net profit graph be time, set time_axis=True, and optionally add a custom time format through time_strformat='%Y/%o/%u/%r format'
+Graphs the distribution of trade returns, net profit at the nth trade, and puts the summary statistics in a table, and shows it in a matplotlib popup window. If you would like to have the x-axis for the net profit graph be time, set time_axis=True, and optionally add a custom time format through time_strformat='%Y/%o/%u/%r format'. If you wish to get the plot, figure, and axes, the method will return these if you set show_window=False, and this will also mean the popup window will not appear.
+## Examples
+```
+from datetime import timedelta
+from random import randint
+logger = SimpleLogger(datetime_support=True)
+
+day_counter = 1
+for x in range(0, 100):
+    logger.log('fried chicken futures', randint(1, 100), randint(1, 100), dt=datetime.now()-timedelta(days=day_counter))
+    logger.log('fried chicken futures', randint(-100, 1), randint(1, 130), dt=datetime.now()-timedelta(days=day_counter))
+    day_counter += 1
+
+# by setting show_window to false, the graphs aren't plotted, but instead returned
+# axes is 2x2
+plt, fig, axes = logger.graph_statistics(show_window=False)
+# alter as you like, such as axes[0][0].set_xlabel('asdf')
+
+# get current positions in securities (which we will then clear)
+print(logger.get_positions())
+
+# example of how to use clear_all_positions(),
+#   replace get_price() with a real api call or any other price getter
+def get_price(security, dt):
+    return len(security) + dt.timetuple().tm_yday
+logger.clear_all_positions(get_price, datetime.today())
+
+# shows the statistics in a graphs in a pop up window. since it calls plt.show()
+# when show_window is not set to false, all code beyond this point won't be executed
+logger.graph_statistics()
+    
+```
 ## Future features
 - more time support for SimpleLogger, including time analysis on returns
 - I will add a ComplexLogger, which will be built upon SimpleLogger, and it will support initial portfolio size, ROI, and many more.
