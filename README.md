@@ -1,5 +1,5 @@
 # trade-stat-logger
-Want to be able to easily log trades of any type of security and measure performance and analyze several factors, such as risk or return distribution? Then check out trade-stat-logger. If you like this project and other projects I've developed, I am looking for a summer internship.
+Want to be able to easily log trades of any type of security and measure performance and analyze several factors, such as risk or return distribution? Then check out trade-stat-logger. If you like this project and other projects I've developed, I am looking for a summer internship, so feel free to contact me at shilewen@uw.edu.
 ## features (SimpleLogger)
 - log trades: long and short
 - get a statistical summary: 
@@ -65,6 +65,7 @@ graph_statistics(time_axis=False, time_strformat='%m/%d/%Y', show_window=True)
 ```
 Graphs the distribution of trade returns, net profit at the nth trade, and puts the summary statistics in a table, and shows it in a matplotlib popup window. If you would like to have the x-axis for the net profit graph be time, set time_axis=True, and optionally add a custom time format through time_strformat='%Y/%o/%u/%r format'. If you wish to get the plot, figure, and axes, the method will return these if you set show_window=False, and this will also mean the popup window will not appear.
 ## Examples
+Other than the example down below, I have developed a MAC strategy using trade_stat_logger [here](https://github.com/shilewenuw/simple_mac_strategy "A simple MAC strategy using trade_stat_logger")
 ```
 from datetime import timedelta
 from random import randint
@@ -96,7 +97,7 @@ logger.graph_statistics()
     
 ```
 ## Hire me?
-I am looking for a summer internship, contact me at shilewen1@gmail.com if interested.
+I am looking for a summer internship, contact me at shilewen@uw.edu if interested.
 ## Future features
 - more time support for SimpleLogger, including time analysis on returns
 - I will add a ComplexLogger, which will be built upon SimpleLogger, and it will support initial portfolio size, ROI, and many more.
