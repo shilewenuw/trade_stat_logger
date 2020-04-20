@@ -7,7 +7,7 @@ class _Position:
 
     def buy(self, shares, share_price):
         if shares < 0 or share_price <= 0:
-            raise ValueError(" Please enter positive numbers for shares and share_price")
+            raise ValueError(" Please enter positive numbers for shares and share_price", shares, share_price)
         if self.shares >= 0:
             self.shares += shares
             self.position_size += shares * share_price

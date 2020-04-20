@@ -7,6 +7,7 @@ from datetime import datetime
 from pytz import timezone
 from yahoo_fin import stock_info as si
 from warnings import warn
+from statsmodels.stats.proportion import proportions_ztest
 
 
 class SimpleLogger:
@@ -40,7 +41,7 @@ class SimpleLogger:
 
     def log_cp(self, security, share_price, dt=None):
         if security in self.positions.keys():
-            self.log(security, share_price, self.positions[security].get_shares(), dt=dt)
+            self.log(security, self.positions[security].get_shares(), share_price, dt=dt)
 
     def get_position(self, security):
         if security in self.positions.keys():
@@ -96,8 +97,8 @@ class SimpleLogger:
         stat_summary = np.reshape(stat_summary, (-1, 2))
         table = axes[1][0].table(cellText=stat_summary, loc='center')
         num_rows, _ = stat_summary.shape
-        table.set_fontsize(16)
-        table.scale(1, 2.3)
+        table.set_fontsize(128 / num_rows)
+        table.scale(1, 18.5 / num_rows)
         axes[1][0].xaxis.set_visible(False)
         axes[1][0].yaxis.set_visible(False)
 
@@ -117,26 +118,34 @@ class SimpleLogger:
         max_drawdown = df['drawdown'].max()
 
         net_profit = df['profit'].sum()
+        num_trades = len(df)
+
         std_dev = df['profit'].std()
         fisher_kurtosis = df['profit'].kurtosis()
+        skew = df['profit'].skew()
 
         df_gains = df[df['profit'] > 0]
+        num_gains = len(df_gains)
         df_losses = df[df['profit'] < 0]
 
         winning_trades = len(df_gains)
-        win_ratio = float(winning_trades / len(df))
+        win_ratio = float(winning_trades / num_trades)
         average_win = df_gains['profit'].mean()
         average_loss = df_losses['profit'].mean()
         kelly_criterion = win_ratio - (1 - win_ratio) / (average_win / average_loss)
 
+        _, win_ratio_pval = proportions_ztest(num_gains, num_trades, .5)
         return {'profit': net_profit,
-                'drawdown': max_drawdown,
-                'std_dev': std_dev,
-                'fisher_kurtosis': fisher_kurtosis,
+                'num_trades': num_trades,
                 'win_ratio': win_ratio,
+                'win_ratio_pval': win_ratio_pval,
                 'average_win': average_win,
                 'average_loss': average_loss,
-                'kelly_criterion': kelly_criterion}
+                'kelly_criterion': kelly_criterion,
+                'fisher_kurtosis': fisher_kurtosis,
+                'std_dev': std_dev,
+                'skew': skew,
+                'drawdown': max_drawdown}
 
     def clear_stock_positions(self, closure_date):
         def get_data(ticker, closure_date_inner):
