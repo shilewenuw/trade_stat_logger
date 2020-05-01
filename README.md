@@ -6,7 +6,6 @@ Want to be able to easily log trades of any type of security and measure perform
   - drawdown: vertical distance between peak and trough of net profits
   - volatility of returns: measures deviation of returns distribution
   - kurtosis: measures tails of returns distribution
-  - probability of winning on a trade: self-explanatory
   - Kelly Criterion: estimate of optimal portfolio allocation
   - And more
 - visualize performance:
@@ -40,7 +39,7 @@ Returns a tuple in the format (# shares, position size), position size is (# sha
 ```
 get_positions()
 ```
-Returns a dict of current security holdings in form of {security: {'shares': # shares, 'avg_share_price': average share price1}, another_security: {'shares': # shares, 'avg_share_price': average share price1}, ...}, where the key corresponding to a security is the string passed through the log() method.
+Returns a dict of current security holdings in form of {security: {'shares': # shares, 'position_size': position size}, another_security: {'shares': # shares, 'position_size': position size}, ...}, where the key corresponding to a security is the string passed through the log() method.
 ***
 ```
 clear_all_positions(get_price_func, closure_date)
