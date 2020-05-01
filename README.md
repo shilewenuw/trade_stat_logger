@@ -1,6 +1,5 @@
 # trade-stat-logger
-Want to be able to easily log trades of any type of security and measure performance and analyze several factors, such as risk or return distribution? Then check out trade-stat-logger. If you like this project and other projects I've developed, I am looking for a summer internship, so feel free to contact me at shilewen@uw.edu.
-## features (SimpleLogger)
+Want to be able to easily log trades of any type of security and measure performance and analyze several factors, such as risk or return distribution? Then check out trade-stat-logger.
 - log trades: long and short
 - get a statistical summary: 
   - net profit: self-explanatory
@@ -96,8 +95,8 @@ logger.clear_all_positions(get_price, datetime.today())
 logger.graph_statistics()
     
 ```
-## Hire me?
-I am looking for a summer internship, contact me at shilewen@uw.edu if interested.
+## Contact me
+If you like me work and have any inquiries (library support or job related), feel free to contact me at shilewen@uw.edu.
 ## Future features
 - more time support for SimpleLogger, including time analysis on returns
 - I will add a ComplexLogger, which will be built upon SimpleLogger, and it will support initial portfolio size, ROI, and many more.
