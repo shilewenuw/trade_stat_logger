@@ -49,7 +49,4 @@ class _Position:
         return self.shares, self.position_size
 
     def to_dict(self):
-        if self.shares != 0:
-            return {'shares': self.shares, 'avg_share_price': self.position_size / self.shares}
-        else:
-            return {'shares': self.shares, 'avg_share_price': 0}
+        return {'shares': self.shares, 'position_size': self.position_size}

@@ -14,6 +14,7 @@ class SimpleLogger:
     def __init__(self, datetime_support=False):
         self.datetime_support = datetime_support
         self.positions = {}
+        # columns = ['security', 'shares', 'share price', 'profit', 'return on trade size']
         columns = ['security', 'shares', 'share price', 'profit']
         if datetime_support:
             columns.insert(0, 'datetime')
@@ -30,6 +31,7 @@ class SimpleLogger:
             else:
                 profit = self.positions[security].buy(shares, share_price)
 
+        #data = [security, shares, share_price, profit, self.nan_division(profit, (abs(shares) * share_price))]
         data = [security, shares, share_price, profit]
         if self.datetime_support:
             if dt is None:
@@ -92,13 +94,14 @@ class SimpleLogger:
         #      verticalalignment='center',
         #      transform=axes[0][0].transAxes)
         stat_summary = list(stat_summary.items())
-        stat_summary = [(a, round(b, 2)) for (a, b) in stat_summary]
+        stat_summary = [(a, round(b, 3)) for (a, b) in stat_summary]
+        stat_summary.extend([('', '')] * (len(stat_summary) % 2))
         stat_summary = np.asarray(stat_summary)
-        stat_summary = np.reshape(stat_summary, (-1, 2))
+        stat_summary = np.reshape(stat_summary, (-1, 4))
         table = axes[1][0].table(cellText=stat_summary, loc='center')
         num_rows, _ = stat_summary.shape
-        table.set_fontsize(128 / num_rows)
         table.scale(1, 18.5 / num_rows)
+        table.set_fontsize(200/num_rows)
         axes[1][0].xaxis.set_visible(False)
         axes[1][0].yaxis.set_visible(False)
 
@@ -112,6 +115,7 @@ class SimpleLogger:
             warn('For most accurate performance results, please clear all holdings, which you can do with clear_all_positions()')
 
         df = self.trade_history.dropna().copy()
+        # following 4 lines to compute drawdown
         df['cumulative'] = df['profit'].cumsum()
         df['high'] = df['cumulative'].cummax()
         df['drawdown'] = df['high'] - df['cumulative']
@@ -119,28 +123,42 @@ class SimpleLogger:
 
         net_profit = df['profit'].sum()
         num_trades = len(df)
+        profit_per_trade = net_profit / num_trades
 
         std_dev = df['profit'].std()
         fisher_kurtosis = df['profit'].kurtosis()
         skew = df['profit'].skew()
 
         df_gains = df[df['profit'] > 0]
+        avg_win = df_gains['profit'].mean()
         num_gains = len(df_gains)
+
         df_losses = df[df['profit'] < 0]
+        avg_loss = df_losses['profit'].mean()
+        num_losses = len(df_losses)
+
+        # rots stands for (r)eturn (o)n (t)rade (s)ize
+        df_pos_rots = df[df['return on trade size'] > 0]
+        df_neg_rots = df[df['return on trade size'] < 0]
+        # avg_pos_rots = df_pos_rots['return on trade size'].mean()
+        # avg_neg_rots = abs(df_neg_rots['return on trade size'].mean())
 
         winning_trades = len(df_gains)
-        win_ratio = float(winning_trades / num_trades)
-        average_win = df_gains['profit'].mean()
-        average_loss = df_losses['profit'].mean()
-        kelly_criterion = win_ratio - (1 - win_ratio) / (average_win / average_loss)
+        win_ratio = self.nan_division(winning_trades, num_trades)
 
-        _, win_ratio_pval = proportions_ztest(num_gains, num_trades, .5)
+        if net_profit > 0:
+            kelly_criterion = win_ratio - self.nan_division(1 - win_ratio, self.nan_division(num_gains, num_losses))
+        else:
+            kelly_criterion = 0
+
+        _, win_ratio_pval = proportions_ztest(count=num_gains, nobs=num_trades, value=.5, alternative='larger')
         return {'profit': net_profit,
                 'num_trades': num_trades,
+                'profit_per_trade': profit_per_trade,
                 'win_ratio': win_ratio,
-                'win_ratio_pval': win_ratio_pval,
-                'average_win': average_win,
-                'average_loss': average_loss,
+                'wr_pv_gt_half': win_ratio_pval,
+                'avg_win': avg_win,
+                'avg_loss': avg_loss,
                 'kelly_criterion': kelly_criterion,
                 'fisher_kurtosis': fisher_kurtosis,
                 'std_dev': std_dev,
@@ -172,6 +190,12 @@ class SimpleLogger:
         # example on how to use clear all positions
         self.clear_all_positions(get_data, closure_date)
 
+    def nan_division(self, a, b):
+        if b == 0:
+            return float('NaN')
+        else:
+            return float(a / b)
+
 
 if __name__ == '__main__':
     from datetime import timedelta
@@ -180,13 +204,13 @@ if __name__ == '__main__':
 
     day_counter = 1
     for x in range(0, 100):
-        logger.log('fried chicken futures', randint(1, 100), randint(1, 100), dt=datetime.now()-timedelta(days=day_counter))
-        logger.log('fried chicken futures', randint(-100, 1), randint(1, 130), dt=datetime.now()-timedelta(days=day_counter))
+        logger.log('fried chicken futures', randint(90, 100), randint(90, 100), dt=datetime.now()-timedelta(days=day_counter))
+        logger.log('fried chicken futures', randint(-100, -90), randint(95, 105), dt=datetime.now()-timedelta(days=day_counter))
         day_counter += 1
 
     # by setting show_window to false, the graphs aren't plotted, but instead returned
-    # axes is 2x2
-    plt, fig, axes = logger.graph_statistics(show_window=False)
+    # axes is 2x2. If there variable names here have don't 1's in name then they interfere with other variables
+    plt1, fig1, axes1 = logger.graph_statistics(show_window=False)
     # alter as you like, such as axes[0][0].set_xlabel('asdf')
 
     # get current positions in securities (which we will then clear)

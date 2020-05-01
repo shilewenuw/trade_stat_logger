@@ -9,7 +9,7 @@ setup(
   author = 'Shile Wen',
   author_email = 'shilewen1@gmail.com',
   url = 'https://github.com/shilewenuw',
-  download_url = 'https://github.com/shilewenuw/trade_stat_logger/archive/v_011.tar.gz',
+  download_url = 'https://github.com/shilewenuw/trade_stat_logger/archive/v_012.tar.gz',
   keywords = ['PYTHON', 'STOCKS', 'TRADING', 'BACKTEST', 'STATISTICS'],
   install_requires=[
           'numpy', 'pandas', 'pytz', 'matplotlib', 'yahoo_fin', 'statsmodels'
