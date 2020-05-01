@@ -85,8 +85,8 @@ print(logger.get_positions())
 
 # example of how to use clear_all_positions(),
 #   replace get_price() with a real api call or any other price getter
-def get_price(security, dt):
-    return len(security) + dt.timetuple().tm_yday
+fake_api_method = lambda security, dt: len(security) + dt.timetuple().tm_yday
+get_price = lambda security, dt: fake_api_method(security, dt)
 logger.clear_all_positions(get_price, datetime.today())
 
 # shows the statistics in a graphs in a pop up window. since it calls plt.show()
