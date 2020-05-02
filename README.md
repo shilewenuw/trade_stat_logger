@@ -6,7 +6,6 @@ Want to be able to easily log trades of any type of security and measure perform
   - drawdown: vertical distance between peak and trough of net profits
   - volatility of returns: measures deviation of returns distribution
   - kurtosis: measures tails of returns distribution
-  - probability of winning on a trade: self-explanatory
   - Kelly Criterion: estimate of optimal portfolio allocation
   - And more
 - visualize performance:
@@ -40,7 +39,7 @@ Returns a tuple in the format (# shares, position size), position size is (# sha
 ```
 get_positions()
 ```
-Returns a dict of current security holdings in form of {security: {'shares': # shares, 'avg_share_price': average share price1}, another_security: {'shares': # shares, 'avg_share_price': average share price1}, ...}, where the key corresponding to a security is the string passed through the log() method.
+Returns a dict of current security holdings in form of {security: {'shares': # shares, 'position_size': position size}, another_security: {'shares': # shares, 'position_size': position size}, ...}, where the key corresponding to a security is the string passed through the log() method.
 ***
 ```
 clear_all_positions(get_price_func, closure_date)
@@ -86,8 +85,8 @@ print(logger.get_positions())
 
 # example of how to use clear_all_positions(),
 #   replace get_price() with a real api call or any other price getter
-def get_price(security, dt):
-    return len(security) + dt.timetuple().tm_yday
+fake_api_method = lambda security, dt: len(security) + dt.timetuple().tm_yday
+get_price = lambda security, dt: fake_api_method(security, dt)
 logger.clear_all_positions(get_price, datetime.today())
 
 # shows the statistics in a graphs in a pop up window. since it calls plt.show()
