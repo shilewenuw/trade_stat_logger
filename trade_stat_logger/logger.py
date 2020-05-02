@@ -138,8 +138,8 @@ class SimpleLogger:
         num_losses = len(df_losses)
 
         # rots stands for (r)eturn (o)n (t)rade (s)ize
-        df_pos_rots = df[df['return on trade size'] > 0]
-        df_neg_rots = df[df['return on trade size'] < 0]
+        # df_pos_rots = df[df['return on trade size'] > 0]
+        # df_neg_rots = df[df['return on trade size'] < 0]
         # avg_pos_rots = df_pos_rots['return on trade size'].mean()
         # avg_neg_rots = abs(df_neg_rots['return on trade size'].mean())
 
