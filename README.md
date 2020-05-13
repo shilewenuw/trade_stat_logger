@@ -64,7 +64,7 @@ graph_statistics(time_axis=False, time_strformat='%m/%d/%Y', show_window=True)
 Graphs the distribution of trade returns, net profit at the nth trade, and puts the summary statistics in a table, and shows it in a matplotlib popup window. If you would like to have the x-axis for the net profit graph be time, set time_axis=True, and optionally add a custom time format through time_strformat='%Y/%o/%u/%r format'. If you wish to get the plot, figure, and axes, the method will return these if you set show_window=False, and this will also mean the popup window will not appear.
 ## Examples
 Use within a simple Moving Average Crossover strategy [here](https://github.com/shilewenuw/simple_mac_strategy)  
-Use within a Time Series Forecasting with Machin Learning strategy [here](https://github.com/shilewenuw/ts-forecasting-ml)
+Use within a Time Series Forecasting with Machine Learning strategy (Jupyter NB) [here](https://github.com/shilewenuw/ts-forecasting-ml)
 
 ```
 from datetime import timedelta
